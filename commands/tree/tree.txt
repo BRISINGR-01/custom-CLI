@@ -1,0 +1,25 @@
+displays the inside structure of a folder in several ways
+
+usage:
+$main_command -s (number of spaces) (folderpath)
+$main_command tree -s/-o/-j/-a (folderpath)
+$main_command tree -f -s/-o/-j/-a (folderpath) (filepath)
+
+** filepath - the path to the file where the output will be written
+** folderpath - the path to the folder which will be dispayed (the current one is defalut)
+** number of spaces - default is 2
+all ** are optional
+
+default:
+$main_command tree => $main_command tree -s currentDir
+$main_command tree -f => $main_command tree -fj currentDir currentDir/currentDir.json
+
+the only important order is the folder and file paths at -f/--file
+if there is -f/--file flag making an object, the values of the files will be the files' contents
+
+flags:
+-s/--spaces     the deeper a file/folder is, the more spaces it has in front of its name
+-o/--object     display it as a js object
+-j/--json       a stringified json version
+-a/--array      display it as an array
+-f/--file       the same, but instead of logged onto the console, it is written into a file

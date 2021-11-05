@@ -1,0 +1,7 @@
+#!/bin/bash
+basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")/../
+
+node "$basedir/cli.js" $PWD $@
+
+ret=$?
+exit $ret

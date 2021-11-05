@@ -1,0 +1,27 @@
+initializes a node project (similarly to 'npm init') by adding to a directory (default is the current one):
+
+init.js             main node server
+package.json    
+public/             publically served folder
+    index.html      landing page
+    404.html
+helpers             obligatory module for the init.js
+
+
+or initializes a custom cli project for the `$main_command add` (see `$main_command add --help`) by creating a directory with:
+
+a js/sh/cmd/ps1 file with the same name as the directory
+a txt file with the same name
+
+
+
+usage:
+$main_command init (path to directory) (-y/--yes) (-k/--keep)
+$main_command init cli (path to directory) (-y/--yes) (-k/--keep)
+
+the order isn't important apart from `init cli`
+() - optinal
+
+flags:
+-y/--yes            accept all suggestions at prompts 
+-k/--keep           if there are existing files with those names, they will be not be overwritten

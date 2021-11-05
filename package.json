@@ -1,0 +1,11 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./cli/cli.js",
+  "scripts": {
+    "start": "setup.exe",
+    "test": "alex"
+  },
+  "keywords": []
+}

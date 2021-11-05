@@ -1,0 +1,2 @@
+removes possible sub commands of this cli
+ex: $main_command remove init

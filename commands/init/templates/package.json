@@ -1,0 +1,13 @@
+{
+  "name": "project_name",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "start": "node init.js"
+  },
+  "keywords": [],
+  "localTesting": "http://localhost:3000",
+  "localPort": 3000,
+  "landingPage": "public/index.html"
+}

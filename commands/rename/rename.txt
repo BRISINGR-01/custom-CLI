@@ -1,0 +1,2 @@
+change the `$main_command` to something else
+Note! the `$main_command` will not work anymore, so the only way to access the cli will be to type the new command in a terminal

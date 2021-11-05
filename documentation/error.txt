@@ -1,0 +1,3 @@
+invalid syntax
+for more information type `$main_command --help` or `$main_command command --help`
+or check out the github page: https://github.com/BRISINGR-01/custom-CLI
