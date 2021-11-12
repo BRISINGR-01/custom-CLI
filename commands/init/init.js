@@ -1,7 +1,7 @@
 const path = require('path');
 const readline = require('readline');
 const { exec } = require('child_process');
-const { mkdir, exists, write, read, readdir, hasFlags, getPaths } = require('../../utilities.js');
+const { mkdir, exists, write, read, readdir, hasFlags, getPaths, validateName } = require('../../utilities.js');
 
 function initialize(args, reciever, hasNodemon) {
     reciever = getPaths(args)[0] || reciever;
@@ -10,6 +10,7 @@ function initialize(args, reciever, hasNodemon) {
     const completitions = readdir(reciever);
     const basedir = __dirname;
     let fileIndex = 0, extIndex = 0,userInput, pattern, suggestion;
+    const optionalExtensions = ['.js', '.sh', '.cmd', '.ps1'];
 
     let templatePackage = read(basedir, 'templates', 'package.json');
     let templateNode = read(basedir, 'templates', 'init.js');
@@ -51,13 +52,16 @@ function initialize(args, reciever, hasNodemon) {
 
 
     if (args.includes('cli')) {
-        const optionalExtensions = ['.js', '.sh', '.cmd', '.ps1'];
         const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout,
             completer: extensionCompleter
         });
         rl.question('what do you want the command to be: ', projectName => {
+            if(!validateName(projectName)) {
+                rl.close();
+                return process.exit(0)
+            };
             if (allYes) {
                 mkdir(reciever, projectName);
                 if (isAllowed(reciever, projectName, `${projectName}.js`))
@@ -75,10 +79,11 @@ function initialize(args, reciever, hasNodemon) {
 
                         mkdir(reciever, projectName);
                         if (isAllowed(reciever, projectName, `${projectName}${ext}`)) 
-                            write([reciever, projectName, `${projectName}${ext}`], read(__dirname, `templates/customCommands/${ext}`));
+                            write([reciever, projectName, `${projectName}${ext}`], read(__dirname, `templates/customCommands/${ext}`).replace(/customCommand/g, projectName));
                         if (isAllowed(reciever, projectName, `${projectName}.txt`)) 
                             write([reciever, projectName, `${projectName}.txt`], read(__dirname, `templates/customCommands/.txt`));
                         rl.close();
+                        process.exit(0);
                     });
                 }
                 ask();

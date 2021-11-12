@@ -2,9 +2,10 @@
   "name": "cli",
   "version": "1.0.0",
   "description": "",
-  "main": "./cli/cli.js",
+  "main": "./bin/alex",
   "scripts": {
-    "start": "setup.exe",
+    "start": "alex || setup.exe",
+    "todo": "check for node then the os",
     "test": "alex"
   },
   "keywords": []

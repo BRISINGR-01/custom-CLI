@@ -35,13 +35,25 @@ function unlink() {
 	fs.unlinkSync(path.resolve(...arguments));
 }
 
+function validateName(name) {
+    if (!name) return console.log('no name is specified');
+	if (name.length > 255) return console.log('the name is too long. it must be under 255 characters');
+	if (new RegExp(/[<>:"/\\|?*\u0000-\u001F]/g).test(name) || new RegExp(/^(con|prn|aux|nul|com\d|lpt\d)$/i).test(name)) return console.log('the name should be a valid file name and should not include: <,>,:,",/,\\,|,?,*,-');
+	if (name === '.' || name === '..') return console.log('the name cannot be . or ..');
+    
+    return true;
+}// taken from https://github.com/sindresorhus/valid-filename
+
 module.exports = {
     neverToDelete: ["uninstall", "reset"],
-    callerpath: "C:\\Users\\University\\AppData\\Local\\Microsoft\\WindowsApps", //$callerpath
-    clipath: "F:\\ALEX\\VSC\\CLI", //$clipath
+    // callerpath: "C:\\Users\\kids\\AppData\\Roaming\\npm", //$callerpath
+    callerpath: "F:\\ALEX\\VSC\\custom-cli\\bin", //$callerpath
+    // clipath: "C:\\Users\\kids\\AppData\\Roaming\\npm\\node_modles\\custom-cli", //$clipath
+    clipath: "F:\\ALEX\\VSC\\custom-cli", //$clipath
     mainCommand: "alex",
     oldCommand: "alex",
-    resetCooldown: "Fri Nov 05 2021 22:41:53 GMT+0200 (Източноевропейско стандартно време)",
+    resetCooldown: "Fri Nov 12 2021 20:46:46 GMT+0200 (Източноевропейско стандартно време)",
+    validateName,
     hasFlags,
     getPaths,
     mkdir,

@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const cp = require("child_process");
-const { callerpath, clipath, mainCommand, read, write, readdir, exists } = require('../../utilities.js');
+const { callerpath, clipath, mainCommand, validateName, read, write, readdir, exists } = require('../../utilities.js');
+
 
 function rename(args) {
     const newName = args[0]?.trim();
-    if (newName === mainCommand) return;
-    if (!newName) return console.log(read(__dirname, 'rename.txt').replace(/\$main_command/g, mainCommand));
+	if (!newName) return console.log(read(__dirname, 'rename.txt').replace(/\$main_command/g, mainCommand));
+    validateName(newName)
     
 	let extensions = ['.exe', '.sh', '.cmd', '.ps1', ''];
 	let newNameLowerCase = newName.toLowerCase();
@@ -38,9 +39,10 @@ function rename(args) {
 			write([callerpath, `${newName}.cmd`], read(callerpath, `${mainCommand}.cmd`));
 			write([callerpath, `${newName}.ps1`], read(callerpath, `${mainCommand}.ps1`));
 
-			write([callerpath, `${mainCommand}`], `echo "This command is invalid. Use \`${newName}\`"`);
-			write([callerpath, `${mainCommand}.cmd`], `echo "This command is invalid. Use \`${newName}\`"`);
-			write([callerpath, `${mainCommand}.ps1`], `echo "This command is invalid. Use \`${newName}\`"`);
+			let text = `echo "This command is renamed. Use \'${newName}\'"`;
+			write([callerpath, `${mainCommand}`], text);
+			write([callerpath, `${mainCommand}.cmd`], text);
+			write([callerpath, `${mainCommand}.ps1`], text);
 		
 			fs.renameSync(path.resolve(clipath, 'documentation', `${mainCommand}.txt`), path.resolve(clipath, 'documentation', `${newName}.txt`));
 			write([__dirname, '../../', 'utilities.js'], read(__dirname, '../../', 'utilities.js').replace(`mainCommand: "${mainCommand}"`, `mainCommand: "${newName}"`));

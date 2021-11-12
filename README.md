@@ -10,4 +10,4 @@ The cli works as I edited the user and system environment variable PATH (the $PA
     bash executes .exe, .sh or plain file with no extension
     cmd executes .cmd
 
-After editing the system variables the terminal(s) need to be restarted.# custom-CLI
+After editing the system variables the terminal(s) need to be restarted.

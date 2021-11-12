@@ -4,12 +4,12 @@ For a step by step tutorial visit https://github.com/BRISINGR-01/custom-CLI#Addi
 You can initialize this project with `$main_command init cli (-y/--yes)`
 
 usage:
-$main_command add (folder path)
+$main_command add your_command
 
-*folder path - optional, current directory is default
+* your_command - the name of the new command you want to add - it will be used by calling `$main_command your_command`
 
 The folder must be named the same as the new command. It must include a .js/.sh/.cmd/.ps1 file and a .txt file, both with the name of the new command
 The .js/.sh/.cmd/.ps1 file is the one to be executed with all of the flags after calling `$main_command your_command`
 The .txt file will be logged onto the console when you call your command with the `--help` flag. For example `$main_command --help your_command`. In this file you can use several variables which will be automatically replaced:
 \$main_command => $main_command
-\$clipath => $clipath
+\$clipath => $clipath // path to the cli folder

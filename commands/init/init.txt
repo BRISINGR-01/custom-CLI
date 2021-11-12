@@ -19,7 +19,6 @@ usage:
 $main_command init (path to directory) (-y/--yes) (-k/--keep)
 $main_command init cli (path to directory) (-y/--yes) (-k/--keep)
 
-the order isn't important apart from `init cli`
 () - optinal
 
 flags:
