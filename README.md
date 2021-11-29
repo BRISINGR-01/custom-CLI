@@ -78,7 +78,7 @@ flags:<br>
 ## add<br>
 
 Adds a new functionality to the `cli` by adding another argument alongside the existing ones like init, tree, add, uninstall...  <br>
-For a step by step tutorial visit <https://github.com/BRISINGR-01/custom-CLI#Adding-custom-commands>  <br>
+For a step by step tutorial visit <https://github.com/BRISINGR-01/custom-CLI#adding-custom-commands><br>
 You can initialize this project with `alex init cli (-y/--yes)`  <br>
 
 usage:<br>
@@ -93,25 +93,25 @@ $callerpath => cli<br>
 $clipath => $clipath // path to the cli folder  <br>
 
 
-## remove  <br>
+## remove<br>
 
 Removes possible sub commands of this cli  <br>
 ex: `alex remove init`  <br>
 
-## reset  <br>
+## reset<br>
 
 This will reset the cli to its original state in <https://github.com/BRISINGR-01/custom-CLI>  <br>
 
-## rename  <br>
+## rename<br>
 
 Change the `cli` to something else  <br>
 Note! the `cli` will not work anymore, so the only way to access the cli will be to type the new command in a terminal  <br>
 
-## uninstall  <br>
+## uninstall<br>
 
 This will uninstall the whole cli  <br>
 
-## Adding custom commands  <br>
+## Adding custom commands<br>
 
 You can easily automize tasks or whatever you want by typing `cli *command* *arguments*`.<br>
 First start the project with `cli init cli`, give the command a name and choose whether the file to be run should be .js, .sh, .cmd or .ps1. Afterwards you will be left with a folder with two files: a .txt and the file which will be run with the arguments from the command line. The .txt file will be displayed when you type `cli *command* --help` or `cli *command* /?`.
