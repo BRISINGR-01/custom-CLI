@@ -1,12 +1,28 @@
 {
-  "name": "cli",
+  "name": "custom-cli",
   "version": "1.0.0",
-  "description": "",
-  "main": "./bin/alex",
-  "scripts": {
-    "start": "alex || setup.exe",
-    "todo": "check for node then the os",
-    "test": "alex"
+  "description": "A begginer cli project, which can be customized with user made commands",
+  "main": "./bin/cli.js",
+  "author": {
+    "name": "BRISINGR-01",
+    "url": "https://github.com/BRISINGR-01"
   },
-  "keywords": []
+  "bin": {
+    "cmd": "./bin/cli.cmd",
+    "bash": "./bin/cli",
+    "ps1": "./bin/cli.ps1"
+  },
+  "scripts": {
+    "start": "cli",
+    "build": "node setup/setup.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BRISINGR-01/custom-CLI"
+  },
+  "keywords": [
+    "cli", 
+    "customizable", 
+    "terminal"
+  ]
 }

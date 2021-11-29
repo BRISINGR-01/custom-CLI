@@ -1,0 +1,13 @@
+available commands: 
+init
+tree
+add
+remove
+reset
+rename
+uninstall
+
+for more information type `$main_command command --help` (for example `$main_command init --help`)
+or check out the github page: https://github.com/BRISINGR-01/custom-CLI
+
+if you want to modify the cli, it is located in $clipath

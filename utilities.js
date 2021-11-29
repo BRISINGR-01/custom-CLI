@@ -46,13 +46,10 @@ function validateName(name) {
 
 module.exports = {
     neverToDelete: ["uninstall", "reset"],
-    // callerpath: "C:\\Users\\kids\\AppData\\Roaming\\npm", //$callerpath
-    callerpath: "F:\\ALEX\\VSC\\custom-cli\\bin", //$callerpath
-    // clipath: "C:\\Users\\kids\\AppData\\Roaming\\npm\\node_modles\\custom-cli", //$clipath
-    clipath: "F:\\ALEX\\VSC\\custom-cli", //$clipath
-    mainCommand: "alex",
-    oldCommand: "alex",
-    resetCooldown: "Fri Nov 12 2021 20:46:46 GMT+0200 (Източноевропейско стандартно време)",
+    callerpath: "$callerpath",
+    clipath: "$clipath",
+    mainCommand: "cli",
+    oldCommand: "cli",
     validateName,
     hasFlags,
     getPaths,

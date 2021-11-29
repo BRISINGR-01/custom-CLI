@@ -5,8 +5,8 @@ $main_command -s (number of spaces) (folderpath)
 $main_command tree -s/-o/-j/-a (folderpath)
 $main_command tree -f -s/-o/-j/-a (folderpath) (filepath)
 
-** filepath - the path to the file where the output will be written
-** folderpath - the path to the folder which will be dispayed (the current one is defalut)
+** filepath - the path to the file where the output will be written		            	  |order doesn't matter
+** folderpath - the path to the folder which will be dispayed (the current one is defalut)|
 ** number of spaces - default is 2
 all ** are optional
 

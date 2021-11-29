@@ -1,93 +1,58 @@
-const https = require("https");
-const readline = require("readline");
 const fs = require('fs');
 const path = require('path');
-let { clipath, resetCooldown, write, read } = require("../../utilities");
+const cli = require('./cli.json');
+const readline = require('readline');
 
-function checkCooldown() {
-    return new Promise((resolve, reject) => {
-        console.log(1);
-        resetCooldown = new Date(resetCooldown) - new Date();
-        if (resetCooldown < 0) resetCooldown = 0;
-        if (resetCooldown) {
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout,
-            });
-            let minutes = Math.floor(resetCooldown / 60000);
-            let seconds = Math.floor((resetCooldown % 60000) / 1000);
-            seconds = seconds < 10 ? `0${seconds}` : seconds;
-            rl.question(`There is a cooldown on this command to prevent overuse of the github cli. ${minutes}:${seconds} minutes are left. Do you want to reset anyways (yes)`, input => {
-                rl.close();
-                if (input === 'yes' || input === 'y') {
-                    write([clipath, 'utilities.js'], read(clipath, 'utilities.js').replace(/resetCooldown.+/, `resetCooldown: "${new Date(+new Date() + +new Date(20000))}",`));
-                    resolve(true);
-                } else {
-                    resolve('false');
-                };
-            });
-        } else {
-            write([clipath, 'utilities.js'], read(clipath, 'utilities.js').replace(/resetCooldown.+/, `resetCooldown: "${new Date(+new Date() + +new Date(20000))}",`));
-            resolve(true);
-        }
-    });
+function write(file, content) {
+    try {
+        return fs.writeFileSync(path.resolve(...file), content);
+    } catch (err) {}
 }
-
-async function getFiles() {
-    new Promise((resolve, reject) => {
-        function options(link = '/repos/brisingr-01/custom-CLI/contents') {
-            return {
-                host: 'api.github.com',
-                path: link,
-                headers: {'User-Agent': 'get-file node.js application'}
-            }
-        }
-        const fileTree = {};
-        let currentBranch = fileTree;
-    
-    
-        async function extractRepo(link) {
-            return new Promise((resolve, reject) => {
-                https.get(options(link), res => {
-                    let body = '';
-                    res.on('data', chunk => body += chunk);
-            
-                    res.on('end', () => {
-                        JSON.parse(body).map(el => {
-                            let name = el.url.replace('https://api.github.com/repos/BRISINGR-01/custom-CLI/contents/', '').replace('?ref=main', '');
-                            if (el.type === 'file') {
-                                currentBranch[name] = name
-                                console.log(name);
-                                resolve(fileTree);
-                            } else {
-                                console.log(name);
-                                let oldBranch = currentBranch;
-                                currentBranch = currentBranch[name];
-                                extractRepo(el.url);
-                                currentBranch = oldBranch;
-                            }
-                        });
-                    });
-                });
-            })
-        }
-        extractRepo()
-    })
+function mkdir() {
+    if (!fs.existsSync(path.resolve(...arguments))) fs.mkdirSync(path.resolve(...arguments), {recursive: true});
 }
 
 async function reset() {
-    console.log(getFiles())
     const stats = fs.lstatSync(path.resolve(__dirname, 'cli.json'));
-    if (stats.birthtime - stats.mtime === 0) {// if it isn't modified
-        return;
+    clipath = path.resolve(__dirname, '../../');
+
+    if (stats.birthtime - stats.mtime !== 0) {
+	    const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+            completer: line => [['yes'], line]
+        });
+
+        clipath = await new Promise((resolve, reject) => rl.question('You have altered the files! Do you wish to continue (yes)', input => {
+	        rl.close();
+	        if (!(input === 'yes' || input === 'y')) {
+		        console.log('Please redownload the cli from https://github.com/BRISINGR-01/custom-CLI')
+		        resolve(false);
+	        }
+	        resolve(clipath);
+	    }));
     }
+    if (!clipath) return;
 
-    // const noCooldown = await checkCooldown();
-    // if (noCooldown) {
-    //     return;
-    // }
+    fs.rmSync(clipath, {recursive: true});
+    mkdir(clipath);
 
-    // return console.log(noCooldown, isNotModified);
+    let currentPath = clipath;
+
+    function pasteFolder(entry) {
+        Object.entries(entry).forEach(el => {
+            if (typeof el[1] === 'object' && el[0] !== 'cli.json') {
+                currentPath = path.resolve(currentPath, el[0]);
+                pasteFolder(el[1]);
+                currentPath = path.resolve(currentPath, '../');
+            } else {
+                mkdir('../', currentPath);
+                write([currentPath, el[0]], el[1]);
+            }
+        });
+    }
+    pasteFolder(cli);
+    write([__dirname, 'cli.json'], JSON.stringify(cli));
 }
 
 module.exports = reset;

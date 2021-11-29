@@ -1,0 +1,6 @@
+#!/bin/bash
+
+node "$clipath/bin/cli.js" $PWD $@
+
+ret=$?
+exit $ret

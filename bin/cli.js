@@ -54,16 +54,12 @@ if (exists(__dirname, '../commands', mainArg)) {
             require(`../commands/${mainArg}/${mainArg}`)(args, reciever);
             break;
         case '.sh':
-            console.log(path.join(__dirname, '../commands', mainArg, `${mainArg}.sh`));
-            console.log(path.resolve(__dirname, '../commands', mainArg, `${mainArg}.sh`));
-            console.log(path.normalize(__dirname, '../commands', mainArg, `${mainArg}.sh`));
-            cp.execFile(path.normalize(__dirname, '../commands', mainArg, `${mainArg}.sh`))
-            cp.execFile('./F:/Alex/VSC/custom-cli/commands/sh/sh.sh', console.log)
-            // cp.execFile('/f/Alex/VSC/custom-cli/commands/sh/sh.sh', console.log)
-            break;
-        case '.cmd':
-            break;
         case '.ps1':
+        case '.cmd':
+            cp.exec(
+                path.resolve(__dirname, '../commands', mainArg, `${mainArg}${ext}`), 
+                (error, stdout, stderr) => console.log(stdout)
+            );
             break;
         default:
             console.log(`wrong extension of ${mainArg}${ext} at ${clipath}/commands/${mainArg}`);

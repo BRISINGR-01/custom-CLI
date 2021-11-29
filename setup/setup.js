@@ -2,61 +2,54 @@
 const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const cli = require('./cli.json');// acquired via `alex tree -fj`
-let commandPath;
+const cli = require('./cli.json');// acquired via `cli tree -f`
+
 const args = process.argv[2] ? 
                 process.argv[2].includes(' ') ?
                     process.argv[2].split(/\s+/) : 
                 process.argv.slice(2) : 
 	         [''];
 
-function setUp() {
-    cp.exec('npm root -g', (error, stdout, stderr) => {
-        const clipath = path.normalize(stdout);
-        const callerpath = path.resolve(clipath, '../')
-        console.log(clipath, callerpath);
-    });
+if (args.includes('--help') || args.includes('/?')) return console.log(`Installs the cli - https://github.com/BRISINGR-01/custom-CLI`);
+function write(file, content) {
+    try {
+        return fs.writeFileSync(path.resolve(...file), content);
+    } catch (err) {}
 }
-if (args.includes('--help') || args.includes('/?')) {
-    return console.log(`sets up the cli by adding three files (for bash, ps1 and cmd) in a folder from the environment variable 'path' or in a node_modules folder\n\nflags:\n-l/--local      instead of globally, the cli is installed in a node_modules folder`);
-} else if (args.includes('-l') || args.includes('--local')) {
-    const paths = require.main.paths;
-    paths.reverse().forEach(el => fs.existsSync(el) && (commandPath = el));
-    if (!commandPath) {
-        fs.mkdirSync(paths[3], { recursive: true });
-        commandPath = paths[3];
-        setUp();
+function mkdir() {
+    if (!fs.existsSync(path.resolve(...arguments))) fs.mkdirSync(path.resolve(...arguments), { recursive: true });
+}
+cp.exec('npm root -g', (error, stdout, stderr) => {
+    let callerPath, cliPath;
+    
+    if (args.includes('-l') || args.includes('--local')) cliPath = __dirname;
+    
+    const npmPath = path.normalize(stdout).replace(/[\r\n]/, '');
+    callerPath = path.resolve(npmPath, '../');
+    cliPath = path.resolve(cliPath || npmPath, 'custom-cli');
+
+    cli['utilities.js'] = cli['utilities.js']
+        .replace('$callerpath', callerPath.replace(/\\/g, '\\\\'))
+        .replace('$clipath', cliPath.replace(/\\/g, '\\\\'));
+
+    write([callerPath, 'cli'],     cli.bin['cli']    .replace('$clipath', cliPath.replace(/\\/g, '\\\\')));
+    write([callerPath, 'cli.cmd'], cli.bin['cli.cmd'].replace('$clipath', cliPath.replace(/\\/g, '\\\\')));
+    write([callerPath, 'cli.ps1'], cli.bin['cli.ps1'].replace('$clipath', cliPath.replace(/\\/g, '\\\\')));
+
+
+    let parsePath = cliPath;
+    mkdir(cliPath);
+    function parseFolder(obj) {
+        Object.entries(obj).forEach(el => {
+            if (typeof el[1] === 'object' && el[0] !== 'cli.json') {
+                parsePath = path.resolve(parsePath, el[0]);
+                parseFolder(el[1]);
+                parsePath = path.resolve(parsePath, '../');
+            } else {
+                mkdir(parsePath);
+                fs.writeFileSync(path.resolve(parsePath, el[0]), el[1]);
+            }
+        });
     }
-} else {
-    setUp();
-}
-
-return;
-const folderPath = path.resolve(process.env.APPDATA, 'cli');
-const CLIPath = path.resolve(folderPath, 'cli');
-if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath);
-
-cli['utilities.js'] = cli['utilities.js']
-    .replace('$callerPath', commandPath.replace(/\\/g, path.sep))
-    .replace('$cliPath', folderPath.replace(/\\/g, path.sep));
-
-
-write([commandPath, 'alex'],     cli.cli.commands['alex']);
-write([commandPath, 'alex.cmd'], cli.cli.commands['alex.cmd']);
-write([commandPath, 'alex.ps1'], cli.cli.commands['alex.ps1']);
-
-
-let parsePath = folderPath;
-function parseFolder(obj) {
-    Object.entries(obj).forEach(el => {
-        if (typeof el[1] === 'object') {
-            parsePath = path.resolve(parsePath, el[0]);
-            parseFolder(el[1]);
-            parsePath = path.resolve(parsePath, '../');
-        } else {
-            if (!fs.existsSync(parsePath)) fs.mkdirSync(parsePath);
-            fs.writeFileSync(path.resolve(parsePath, el[0]), el[1]);
-        }
-    });
-}
-parseFolder(cli);
+    parseFolder(cli);
+});
